@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.vitoraugusto.aulas.R;
 import com.vitoraugusto.aulas.database.UsuarioDAO;
 import com.vitoraugusto.aulas.model.Usuario;
+import com.vitoraugusto.aulas.util.Senha;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -42,19 +43,22 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            Usuario usuario = usuarioDAO.login(email, senha);
+            Usuario usuario = usuarioDAO.getUsuarioPorEmail(email);
+
 
             if (usuario != null) {
-                if ("professor".equals(usuario.getTipo())) {
-                    Intent intent = new Intent(this, ProfessorDashboardActivity.class);
-                    intent.putExtra("professorId", usuario.getId()); // <- passa ID do professor
-                    startActivity(intent);
-                    finish();
-                } else if ("aluno".equals(usuario.getTipo())) {
-                    Intent intent = new Intent(this, AlunoDashboardActivity.class);
-                    intent.putExtra("alunoId", usuario.getId()); // <- passa ID do aluno
-                    startActivity(intent);
-                    finish();
+                if (Senha.checkPassword(senha, usuario.getSenha())) {
+                    if ("professor".equals(usuario.getTipo())) {
+                        Intent intent = new Intent(this, ProfessorDashboardActivity.class);
+                        intent.putExtra("professorId", usuario.getId()); // <- passa ID do professor
+                        startActivity(intent);
+                        finish();
+                    } else if ("aluno".equals(usuario.getTipo())) {
+                        Intent intent = new Intent(this, AlunoDashboardActivity.class);
+                        intent.putExtra("alunoId", usuario.getId()); // <- passa ID do aluno
+                        startActivity(intent);
+                        finish();
+                    }
                 }
             } else {
                 Toast.makeText(this, "Credenciais inválidas!", Toast.LENGTH_SHORT).show();

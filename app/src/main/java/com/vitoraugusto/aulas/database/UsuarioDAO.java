@@ -18,10 +18,6 @@ public class UsuarioDAO {
     public UsuarioDAO(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
-
-    // -----------------------
-    // Inserir usuário (Aluno ou Professor)
-    // -----------------------
     public long inserirUsuario(Usuario usuario) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -30,7 +26,6 @@ public class UsuarioDAO {
         values.put("senha", usuario.getSenha());
         values.put("tipo", usuario.getTipo());
 
-        // salva cpf ou area dependendo do tipo
         if (usuario instanceof Aluno) {
             values.put("cpf", ((Aluno) usuario).getCpf());
             values.putNull("area");
@@ -47,9 +42,6 @@ public class UsuarioDAO {
         return id;
     }
 
-    // -----------------------
-    // Login (email + senha)
-    // -----------------------
     public Usuario login(String email, String senha) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query("usuarios", null,
@@ -66,9 +58,6 @@ public class UsuarioDAO {
         return u;
     }
 
-    // -----------------------
-    // Verifica se CPF já existe (usado no registro)
-    // -----------------------
     public boolean cpfExiste(String cpf) {
         if (cpf == null || cpf.trim().isEmpty()) return false;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -79,9 +68,6 @@ public class UsuarioDAO {
         return existe;
     }
 
-    // -----------------------
-    // Buscar por CPF
-    // -----------------------
     public Usuario buscarPorCpf(String cpf) {
         if (cpf == null) return null;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -96,9 +82,6 @@ public class UsuarioDAO {
         return u;
     }
 
-    // -----------------------
-    // Buscar por ID
-    // -----------------------
     public Usuario buscarPorId(int id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query("usuarios", null, "id = ?", new String[]{String.valueOf(id)}, null, null, null);
@@ -112,9 +95,6 @@ public class UsuarioDAO {
         return u;
     }
 
-    // -----------------------
-    // Listar apenas Alunos
-    // -----------------------
     public List<Aluno> listarAlunos() {
         List<Aluno> lista = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -137,9 +117,6 @@ public class UsuarioDAO {
         return lista;
     }
 
-    // -----------------------
-    // Listar apenas Professores
-    // -----------------------
     public List<Professor> listarProfessores() {
         List<Professor> lista = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -162,9 +139,6 @@ public class UsuarioDAO {
         return lista;
     }
 
-    // -----------------------
-    // Atualizar usuário (usado no EditAlunoActivity)
-    // -----------------------
     public boolean atualizarUsuario(Usuario usuario) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -186,9 +160,6 @@ public class UsuarioDAO {
         return rows > 0;
     }
 
-    // -----------------------
-    // Redefinir senha por email
-    // -----------------------
     public boolean redefinirSenha(String email, String novaSenha) {
         if (email == null || email.trim().isEmpty()) return false;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -199,9 +170,6 @@ public class UsuarioDAO {
         return linhasAfetadas > 0;
     }
 
-    // -----------------------
-    // Converte cursor para um objeto Usuario (Aluno / Professor quando aplicável)
-    // -----------------------
     private Usuario cursorToUsuario(Cursor cursor) {
         int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
         String nome = cursor.getString(cursor.getColumnIndexOrThrow("nome"));
@@ -218,9 +186,35 @@ public class UsuarioDAO {
             try { area = cursor.getString(cursor.getColumnIndexOrThrow("area")); } catch (Exception ignored) {}
             return new Professor(id, nome, email, senha, area);
         } else {
-            // Se a sua classe Usuario tiver um construtor (id,nome,email,senha,tipo) use-o.
-            // Caso contrário, adapte para usar os setters disponíveis na sua classe Usuario.
             return new Usuario(id, nome, email, senha, tipo);
         }
+    }
+
+    public Usuario getUsuarioPorEmail(String email) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Usuario usuario = null;
+
+        String selecao = "email = ?";
+        String[] argumentos = {email};
+
+        Cursor cursor = db.query("usuarios",
+                null,
+                selecao,
+                argumentos,
+                null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            usuario = new Usuario();
+            usuario.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+            usuario.setNome(cursor.getString(cursor.getColumnIndexOrThrow("nome")));
+            usuario.setEmail(cursor.getString(cursor.getColumnIndexOrThrow("email")));
+            usuario.setSenha(cursor.getString(cursor.getColumnIndexOrThrow("senha")));
+            usuario.setTipo(cursor.getString(cursor.getColumnIndexOrThrow("tipo")));
+        }
+
+        if (cursor != null) cursor.close();
+        db.close();
+
+        return usuario;
     }
 }
