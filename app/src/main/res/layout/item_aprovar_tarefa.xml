@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/txtDescricaoTarefa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descrição da tarefa"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/txtAlunoTarefa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Aluno ID: "
+        android:textSize="16sp"
+        android:paddingBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnAprovar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Aprovar"
+        android:backgroundTint="@android:color/holo_green_dark"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnReprovar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reprovar"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:textColor="@android:color/white"/>
+
+</LinearLayout>

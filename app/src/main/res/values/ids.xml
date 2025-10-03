@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="editEmail" type="id" />
+    <item name="editSenha" type="id" />
+    <item name="btnLogin" type="id" />
+    <item name="btnReset" type="id" />
+    <item name="edtNome" type="id" />
+    <item name="edtEmail" type="id" />
+    <item name="edtSenha" type="id" />
+    <item name="edtCpf" type="id" />
+    <item name="btnSalvar" type="id" />
+    <item name="txtDescricaoTarefa" type="id" />
+    <item name="txtAlunoTarefa" type="id" />
+    <item name="btnAprovar" type="id" />
+    <item name="btnReprovar" type="id" />
+</resources>

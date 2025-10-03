@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <Button android:id="@+id/btnCadastrarAluno" android:text="Cadastrar Aluno"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <Button android:id="@+id/btnEditarAluno" android:text="Editar Aluno"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <Button android:id="@+id/btnAtribuirAula" android:text="Atribuir Aula"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <Button android:id="@+id/btnCriarTarefa" android:text="Criar Tarefa"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btnAprovarTarefa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/aprovar_tarefa" />
+
+    <Button android:id="@+id/btnGerarRelatorio" android:text="Gerar Relatório PDF"
+        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btnListarAlunos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Listar Alunos"
+        android:layout_marginTop="12dp"/>
+
+</LinearLayout>
+
+
