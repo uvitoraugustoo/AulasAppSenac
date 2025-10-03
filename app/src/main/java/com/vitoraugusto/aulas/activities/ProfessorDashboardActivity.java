@@ -59,9 +59,6 @@ public class ProfessorDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
-
-
         btnListarAlunos.setOnClickListener(v -> {
             Intent intent = new Intent(this, ListAlunosActivity.class);
             startActivity(intent);

@@ -17,6 +17,7 @@ import com.vitoraugusto.aulas.database.UsuarioDAO;
 import com.vitoraugusto.aulas.model.Aluno;
 import com.vitoraugusto.aulas.model.Professor;
 import com.vitoraugusto.aulas.model.Usuario;
+import com.vitoraugusto.aulas.util.Senha;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -81,6 +82,8 @@ public class RegisterActivity extends AppCompatActivity {
         String cpf = edtCpf.getText().toString().trim();
         String area = edtArea.getText().toString().trim();
 
+        String senhaHash = Senha.hashPassword(senha);
+
         if (TextUtils.isEmpty(nome) || TextUtils.isEmpty(email) || TextUtils.isEmpty(senha)) {
             Toast.makeText(this, "Preencha todos os campos obrigatórios!", Toast.LENGTH_SHORT).show();
             return;
@@ -99,7 +102,13 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(this, "CPF já registrado!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Aluno aluno = new Aluno(0, nome, email, senha, cpf);
+
+            if (!isCPFValido(cpf)){
+                Toast.makeText(this, "CPF invalidoU", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Aluno aluno = new Aluno(0, nome, email, senhaHash, cpf);
             long id = usuarioDAO.inserirUsuario(aluno);
             if (id > 0) {
                 Toast.makeText(this, "Aluno registrado!", Toast.LENGTH_SHORT).show();
@@ -118,7 +127,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(this, "Informe a área do professor!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Professor professor = new Professor(0, nome, email, senha, area);
+            Professor professor = new Professor(0, nome, email, senhaHash, area);
             long id = usuarioDAO.inserirUsuario(professor);
             if (id > 0) {
                 Toast.makeText(this, "Professor registrado!", Toast.LENGTH_SHORT).show();
@@ -129,6 +138,43 @@ public class RegisterActivity extends AppCompatActivity {
             }
         } else {
             Toast.makeText(this, "Selecione se é Aluno ou Professor!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean isCPFValido(String cpf) {
+        if (cpf == null || cpf.length() != 11) {
+            return false;
+        }
+        if (cpf.matches("(\\d)\\1{10}")) {
+            return false;
+        }
+        try {
+            int[] numeros = new int[11];
+            for (int i = 0; i < 11; i++) {
+                numeros[i] = Integer.parseInt(cpf.substring(i, i + 1));
+            }
+            int soma = 0;
+            for (int i = 0; i < 9; i++) {
+                soma += numeros[i] * (10 - i);
+            }
+            int primeiroDigito = 11 - (soma % 11);
+            if (primeiroDigito >= 10) {
+                primeiroDigito = 0;
+            }
+            if (numeros[9] != primeiroDigito) {
+                return false;
+            }
+            soma = 0;
+            for (int i = 0; i < 10; i++) {
+                soma += numeros[i] * (11 - i);
+            }
+            int segundoDigito = 11 - (soma % 11);
+            if (segundoDigito >= 10) {
+                segundoDigito = 0;
+            }
+            return numeros[10] == segundoDigito;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 }

@@ -7,6 +7,8 @@ public class Usuario {
     private String senha;
     private String tipo; // "aluno" ou "professor"
 
+    public Usuario() {
+    }
     public Usuario(int id, String nome, String email, String senha, String tipo) {
         this.id = id;
         this.nome = nome;
